@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "awsblogcourse80936859": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
