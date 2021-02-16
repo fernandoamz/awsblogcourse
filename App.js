@@ -1,7 +1,10 @@
-import React from 'react';
-import Amplify, {Auth} from 'aws-amplify';
+import React, {useEffect, useState} from 'react';
+import Amplify, {Auth, API, graphqlOperation} from 'aws-amplify';
 import {withAuthenticator} from 'aws-amplify-react-native';
 import {Text, TouchableOpacity} from 'react-native';
+import {createTodo, updateTodo, deleteTodo} from './src/graphql/mutations';
+import {listTodos} from './src/graphql/queries';
+
 import config from './src/aws-exports';
 
 Amplify.configure({
@@ -12,6 +15,8 @@ Amplify.configure({
 });
 
 function App() {
+  const [listTasks, setListTaks] = useState([]);
+
   function SignOut() {
     try {
       Auth.signOut();
@@ -19,6 +24,18 @@ function App() {
       console.log(err);
     }
   }
+
+  useEffect(() => {
+    async function fetchData() {
+      const todo = {name: 'My first todo', description: 'Hello world!'};
+      await API.graphql(graphqlOperation(createTodo, {input: todo}));
+
+      const listTasksData = await API.graphql(graphqlOperation(listTodos));
+      console.log(listTasksData);
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <>
